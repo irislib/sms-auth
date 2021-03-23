@@ -1,0 +1,104 @@
+<html>
+  <head>
+    <!-- The core Firebase JS SDK is always required and must be listed first -->
+    <script src="https://www.gstatic.com/firebasejs/8.3.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.3.1/firebase-auth.js"></script>
+  </head>
+
+  <body>
+    <h1>Iris sms auth</h1>
+
+    <form id="phone-number-form">
+      <p>
+        Phone number
+      </p>
+      <p>
+        <input type="tel" placeholder="Phone number" id="phone"/>
+      </p>
+      <p>
+        <input type="submit" value="Send verification code"/>
+      </p>
+
+      <div id="recaptcha-container"></div>
+    </form>
+
+    <form id="verification-code-form" style="display:none">
+      <p>
+        Verification code
+      </p>
+      <p>
+        <input type="text" placeholder="Verification code" id="verification-code"/>
+      </p>
+      <p>
+        <input type="submit" value="Verify"/>
+      </p>
+    </form>
+
+    <div id="success" style="display:none;color:green">
+      Verification successful
+    </div>
+
+    <div id="error"></div>
+
+    <script>
+      // Your web app's Firebase configuration
+      var firebaseConfig = {
+        apiKey: "AIzaSyCu3DqArWg9-MtpftrzfaZAA0MIr20WL0o",
+        authDomain: "iris-99003.firebaseapp.com",
+        databaseURL: "https://iris-99003.firebaseio.com",
+        projectId: "iris-99003",
+        storageBucket: "iris-99003.appspot.com",
+        messagingSenderId: "375748982628",
+        appId: "1:375748982628:web:0e70b6b64230a2ffd82c71"
+      };
+      // Initialize Firebase
+      firebase.initializeApp(firebaseConfig);
+      window.recaptchaVerifier = new firebase.auth.RecaptchaVerifier('recaptcha-container', {
+        'size': 'normal'
+      });
+      const errorContainer = document.getElementById('error');
+      const phoneNumberForm = document.getElementById('phone-number-form');
+      const verificationCodeForm = document.getElementById('verification-code-form');
+      phoneNumberForm.onsubmit = function(event) {
+        event.preventDefault();
+        const appVerifier = window.recaptchaVerifier;
+        const phoneNumber = document.getElementById('phone').value;
+        errorContainer.style = 'display:none';
+        firebase.auth().signInWithPhoneNumber(phoneNumber, appVerifier)
+        .then((confirmationResult) => {
+          // SMS sent. Prompt user to type the code from the message, then sign the
+          // user in with confirmationResult.confirm(code).
+          window.confirmationResult = confirmationResult;
+          phoneNumberForm.style = 'display:none';
+          verificationCodeForm.style = '';
+          console.log(confirmationResult);
+          // ...
+        }).catch((error) => {
+          console.error(error);
+          errorContainer.style = 'display:block;color:red';
+          errorContainer.innerHTML = error && error.message;
+          appVerifier.render().then(function(widgetId) {
+            grecaptcha.reset(widgetId);
+          });
+          // Error; SMS not sent
+          // ...
+        });
+      };
+
+      verificationCodeForm.onsubmit = function(event) {
+        event.preventDefault();
+        const code = document.getElementById('verification-code').value;
+        window.confirmationResult.confirm(code).then(result => {
+          console.log('verification successful', result);
+          verificationCodeForm.style = 'display: none';
+          errorContainer.style = 'display: none';
+          document.getElementById('success').style = '';
+        }).catch(error => {
+          console.error(error);
+          errorContainer.style = 'display:block;color:red';
+          errorContainer.innerHTML = error && error.message;
+        });
+      }
+    </script>
+  </body>
+</html>
