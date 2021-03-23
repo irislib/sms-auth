@@ -1,0 +1,7 @@
+{
+  "dependencies": {
+    "express": "^4.17.1",
+    "firebase-admin": "^9.5.0",
+    "gun": "^0.2020.520"
+  }
+}

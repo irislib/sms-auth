@@ -3,42 +3,80 @@
     <!-- The core Firebase JS SDK is always required and must be listed first -->
     <script src="https://www.gstatic.com/firebasejs/8.3.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.3.1/firebase-auth.js"></script>
+    <style type="text/css">
+
+      html, body {
+        height: 100%;
+        margin: 0;
+      }
+
+      body {
+        background: #5f239c;
+        text-align: center;
+        font-family: "SF Pro Text", "SF Pro Icons", system, -apple-system, system-ui, system-ui, "Helvetica Neue", Helvetica, "Lucida Grande", sans-serif;
+        color: white;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+      }
+
+      input[type=submit] {
+        background: #00d899;
+        color: white;
+        font-weight: bold;
+        text-transform: uppercase;
+      }
+
+      input {
+        padding: 15px;
+        outline: none;
+        border: 0;
+        font-size: 15px;
+        border-radius: 50px;
+        margin-right: 7px;
+      }
+
+    </style>
+
   </head>
 
   <body>
-    <h1>Iris sms auth</h1>
+    <div class="container">
+      <h1>Iris sms auth</h1>
 
-    <form id="phone-number-form">
-      <p>
-        Phone number
-      </p>
-      <p>
-        <input type="tel" placeholder="Phone number" id="phone"/>
-      </p>
-      <p>
-        <input type="submit" value="Send verification code"/>
-      </p>
+      <form id="phone-number-form">
+        <p>
+          Phone number
+        </p>
+        <p>
+          <input type="tel" placeholder="Phone number" id="phone"/>
+        </p>
+        <p>
+          <input type="submit" value="Send verification code"/>
+        </p>
 
-      <div id="recaptcha-container"></div>
-    </form>
+        <div id="recaptcha-container"></div>
+      </form>
 
-    <form id="verification-code-form" style="display:none">
-      <p>
-        Verification code
-      </p>
-      <p>
-        <input type="text" placeholder="Verification code" id="verification-code"/>
-      </p>
-      <p>
-        <input type="submit" value="Verify"/>
-      </p>
-    </form>
+      <form id="verification-code-form" style="display:none">
+        <p>
+          Verification code
+        </p>
+        <p>
+          <input type="text" placeholder="Verification code" id="verification-code"/>
+        </p>
+        <p>
+          <input type="submit" value="Verify"/>
+        </p>
+      </form>
 
-    <div id="success" style="display:none;color:green">
-      Verification successful
+      <div id="success" style="display:none">
+        Verification successful
+      </div>
+
+      <div id="error"></div>
     </div>
-
-    <div id="error"></div>
 
     <script>
       // Your web app's Firebase configuration
@@ -75,7 +113,7 @@
           // ...
         }).catch((error) => {
           console.error(error);
-          errorContainer.style = 'display:block;color:red';
+          errorContainer.style = 'display:block';
           errorContainer.innerHTML = error && error.message;
           appVerifier.render().then(function(widgetId) {
             grecaptcha.reset(widgetId);
@@ -93,6 +131,8 @@
           verificationCodeForm.style = 'display: none';
           errorContainer.style = 'display: none';
           document.getElementById('success').style = '';
+          const pub = 'hyECQHwSo7fgr2MVfPyakvayPeixxsaAWVtZ-vbaiSc.TXIp8MnCtrnW6n2MrYquWPcc-DTmZzMBmc2yaGv9gIU';
+          fetch(`/auth?token=asdf&pub=${pub}`);
         }).catch(error => {
           console.error(error);
           errorContainer.style = 'display:block;color:red';
