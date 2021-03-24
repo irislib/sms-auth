@@ -97,6 +97,13 @@
       const errorContainer = document.getElementById('error');
       const phoneNumberForm = document.getElementById('phone-number-form');
       const verificationCodeForm = document.getElementById('verification-code-form');
+
+      function displayError(error) {
+        console.error(error);
+        errorContainer.style = 'display:block;color:red';
+        errorContainer.innerHTML = error && error.message;
+      }
+
       phoneNumberForm.onsubmit = function(event) {
         event.preventDefault();
         const appVerifier = window.recaptchaVerifier;
@@ -112,9 +119,7 @@
           console.log(confirmationResult);
           // ...
         }).catch((error) => {
-          console.error(error);
-          errorContainer.style = 'display:block';
-          errorContainer.innerHTML = error && error.message;
+          displayError(error);
           appVerifier.render().then(function(widgetId) {
             grecaptcha.reset(widgetId);
           });
@@ -127,17 +132,15 @@
         event.preventDefault();
         const code = document.getElementById('verification-code').value;
         window.confirmationResult.confirm(code).then(result => {
-          console.log('verification successful', result);
+          console.log('verification successful, registering public key', result);
           verificationCodeForm.style = 'display: none';
           errorContainer.style = 'display: none';
-          document.getElementById('success').style = '';
           const pub = 'hyECQHwSo7fgr2MVfPyakvayPeixxsaAWVtZ-vbaiSc.TXIp8MnCtrnW6n2MrYquWPcc-DTmZzMBmc2yaGv9gIU';
-          fetch(`/auth?token=asdf&pub=${pub}`);
-        }).catch(error => {
-          console.error(error);
-          errorContainer.style = 'display:block;color:red';
-          errorContainer.innerHTML = error && error.message;
-        });
+          return firebase.auth().currentUser.getIdToken(/* forceRefresh */ true).then(function(idToken) {
+            fetch(`/auth?token=${idToken}&pub=${pub}`);
+            document.getElementById('success').style = '';
+          });
+        }).catch(displayError);
       }
     </script>
   </body>

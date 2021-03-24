@@ -1309,10 +1309,9 @@ gtoken@^5.0.4:
     google-p12-pem "^3.0.3"
     jws "^4.0.0"
 
-gun@^0.2020.520:
+gun@amark/gun:
   version "0.2020.520"
-  resolved "https://registry.yarnpkg.com/gun/-/gun-0.2020.520.tgz#3bf7c9c0c83ba04aee94c0157c4d4e0a64e865ad"
-  integrity sha512-hMDmj4QQnejweZEy4njbyNlll+GO7H8XIq/SdQ23kFV29B6HqA0+bQmhLCxWKLwQvfRXx9SgSXG/ImGrER/CqQ==
+  resolved "https://codeload.github.com/amark/gun/tar.gz/4dc672eeb4a9a45f31d9cd71536525ba4a02fc64"
   dependencies:
     ws "^7.2.1"
   optionalDependencies:
