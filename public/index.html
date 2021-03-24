@@ -72,7 +72,7 @@
       </form>
 
       <div id="success" style="display:none">
-        Verification successful
+        Verification successful. Redirecting in 5s.
       </div>
 
       <div id="error"></div>
@@ -144,6 +144,9 @@
           return firebase.auth().currentUser.getIdToken(/* forceRefresh */ true).then(function(idToken) {
             fetch(`/auth?token=${idToken}&pub=${pub}`);
             document.getElementById('success').style = '';
+            setTimeout(() => {
+              window.location = 'https://iris.to/#/profile/ysavwX9TVnlDw93w9IxezCJqSDMyzIU-qpD8VTN5yko.3ll1dFdxLkgyVpejFkEMOFkQzp_tRrkT3fImZEx94Co';
+            }, 5000);
           });
         }).catch(displayError);
       }
