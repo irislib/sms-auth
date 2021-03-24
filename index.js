@@ -45,4 +45,4 @@ app.get('/auth', async (req, res) => {
 
 app.use(express.static('public'));
 
-app.listen(INCOMING_HTTP_PORT);
+app.listen(PORT);
