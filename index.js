@@ -1,6 +1,6 @@
 const IRIS_PRIVATE_KEY = JSON.parse(process.env.IRIS_PRIVATE_KEY || 'null');
 const PEERS = process.env.PEERS && process.env.PEERS.split(',');
-const INCOMING_HTTP_PORT = 3000;
+const PORT = process.env.PORT || 3000;
 
 // process.env.GOOGLE_APPLICATION_CREDENTIALS should be the file path of a JSON containing the service account key
 
