@@ -97,6 +97,8 @@
       const errorContainer = document.getElementById('error');
       const phoneNumberForm = document.getElementById('phone-number-form');
       const verificationCodeForm = document.getElementById('verification-code-form');
+      const urlParams = new URLSearchParams(window.location.search);
+      const pub = urlParams.get('pub');
 
       function displayError(error) {
         console.error(error);
@@ -135,7 +137,6 @@
           console.log('verification successful, registering public key', result);
           verificationCodeForm.style = 'display: none';
           errorContainer.style = 'display: none';
-          const pub = 'hyECQHwSo7fgr2MVfPyakvayPeixxsaAWVtZ-vbaiSc.TXIp8MnCtrnW6n2MrYquWPcc-DTmZzMBmc2yaGv9gIU';
           return firebase.auth().currentUser.getIdToken(/* forceRefresh */ true).then(function(idToken) {
             fetch(`/auth?token=${idToken}&pub=${pub}`);
             document.getElementById('success').style = '';
