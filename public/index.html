@@ -28,6 +28,10 @@
         text-transform: uppercase;
       }
 
+      input:disabled {
+        opacity: 0.5;
+      }
+
       input {
         padding: 15px;
         outline: none;
@@ -44,7 +48,6 @@
   <body>
     <div id="container" style="display:none">
       <h1>Iris sms auth</h1>
-
       <form id="phone-number-form">
         <p>
           Phone number
@@ -112,6 +115,10 @@
 
       phoneNumberForm.onsubmit = function(event) {
         event.preventDefault();
+        const elements = phoneNumberForm.elements;
+        for (var i = 0, len = elements.length; i < len; ++i) {
+            elements[i].disabled = true;
+        }
         const appVerifier = window.recaptchaVerifier;
         const phoneNumber = document.getElementById('phone').value;
         errorContainer.style = 'display:none';
@@ -126,6 +133,9 @@
           // ...
         }).catch((error) => {
           displayError(error);
+          for (var i = 0, len = elements.length; i < len; ++i) {
+              elements[i].disabled = false;
+          }
           appVerifier.render().then(function(widgetId) {
             grecaptcha.reset(widgetId);
           });
@@ -145,7 +155,8 @@
             fetch(`/auth?token=${idToken}&pub=${pub}`);
             document.getElementById('success').style = '';
             setTimeout(() => {
-              window.location = 'https://iris.to/#/profile/ysavwX9TVnlDw93w9IxezCJqSDMyzIU-qpD8VTN5yko.3ll1dFdxLkgyVpejFkEMOFkQzp_tRrkT3fImZEx94Co';
+              window.history.back();
+              // window.location = 'https://iris.to/#/profile/ysavwX9TVnlDw93w9IxezCJqSDMyzIU-qpD8VTN5yko.3ll1dFdxLkgyVpejFkEMOFkQzp_tRrkT3fImZEx94Co';
             }, 5000);
           });
         }).catch(displayError);
